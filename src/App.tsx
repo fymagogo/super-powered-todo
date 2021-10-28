@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import routes from './utilities/routes';
+import { Switch, Route } from 'react-router-dom';
+import Page from './components/Page';
+
+const children: JSX.Element[] = [];
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    for (const route of routes) {
+        const Component: typeof React.Component = route.component as unknown as typeof React.Component;
+        children.push(
+            <Route exact={route.exact} path={route.path} key={route.path}>
+                <Page>
+                    <Component />
+                </Page>
+            </Route>,
+        );
+    }
+    return (
+        <Fragment>
+            <Switch>{children}</Switch>
+        </Fragment>
+    );
 }
 
 export default App;
